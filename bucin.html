@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bucin Envelope</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0c0c2a;
+            overflow: hidden;
+        }
+        .envelope-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+        }
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background-color: #ff69b4;
+            position: absolute;
+            transition: transform 1s;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ff69b4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ff1493;
+            transform-origin: top;
+            z-index: 3;
+        }
+        .letter {
+            width: 280px;
+            height: 180px;
+            background-color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #ff1493;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            transition: transform 1s, opacity 1s;
+            z-index: 1;
+            transform-origin: top;
+            opacity: 0;
+        }
+        .envelope.open {
+            animation: fallDown 1s forwards;
+        }
+        .envelope.open + .letter {
+            animation: revealLetter 1s forwards;
+            animation-delay: 0.5s;
+        }
+        @keyframes revealLetter {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(-50px);
+                opacity: 1;
+            }
+        }
+        @keyframes fallDown {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(calc(100vh + 200px));
+            }
+        }
+        .heart-btn, .continue-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 40px;
+            color: white;
+            transition: transform 0.3s, opacity 0.3s;
+            z-index: 4;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .heart-btn:hover, .continue-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        .heart-btn:focus, .continue-btn:focus {
+            outline: none;
+        }
+        .heart-btn.hidden, .continue-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .continue-btn {
+            font-size: 20px;
+            background-color: #ff69b4;
+            padding: 10px 20px;
+            border-radius: 5px;
+            top: auto;
+            bottom: -100px;
+        }
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="starsContainer"></div>
+    <div class="envelope-container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-front"></div>
+            <div class="flap"></div>
+        </div>
+        <div class="letter" id="letter">
+            <p>"text"</p>
+            <p>"text"</p>
+            <p>"text</p>
+            <p>"text"</p>
+        </div>
+        <button class="heart-btn" id="heartBtn" onclick="openEnvelope()">❤️</button>
+        <button class="continue-btn hidden" id="continueBtn" onclick="goToEnding()">Siniiii</button>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            document.getElementById('envelope').classList.add('open');
+            document.getElementById('heartBtn').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('continueBtn').classList.remove('hidden');
+            }, 1500);
+        }
+
+        function goToEnding() {
+            window.location.href = 'ending.html';
+        }
+
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const starCount = 100;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+
+        createStars();
+    </script>
+</body>
+</html>
